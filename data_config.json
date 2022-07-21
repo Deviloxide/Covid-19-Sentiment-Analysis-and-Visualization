@@ -1,0 +1,8 @@
+{
+	"main_dataset_path": "complete_vaccine_tweets.csv",
+	"num_neg_labels": "10000",
+	"num_pos_labels": "10000",
+	"trainset_path": "datasets/training_dataset.csv",
+	"testset_path": "datasets/test_vaccine_tweets.csv",
+	"num_training_sample": "20000"
+}
