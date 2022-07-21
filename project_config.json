@@ -1,0 +1,13 @@
+{
+	"datasets_path": "datasets",
+	"model_dir": "saved_model",
+	"device": "-1",
+	"model_name": "vaccine_sentiment_classifer.pt",
+	"embedding_dim": "100",
+	"hidden_dim": "256",
+	"output_dim": "1",
+	"batch_size": "64",
+	"max_vocab_size": "30000",
+	"learning_rate": "1e-3",
+	"epoch": "20"
+}
