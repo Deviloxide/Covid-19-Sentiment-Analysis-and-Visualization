@@ -1,0 +1,7 @@
+numpy
+pandas
+torch
+transformers
+textblob
+seaborn
+scikit-learn
