@@ -1,4 +1,3 @@
-import plotly.express as px
 import plotly.figure_factory as ff
 import plotly.graph_objects as go
 import numpy as np
@@ -94,7 +93,6 @@ neu_likes = np.log10(neu_likes_init)
 pos_likes = np.log10(pos_likes_init)
 
 for arr in [neg_likes, neu_likes, pos_likes]:
-    arr[arr == -np.inf] = 0
     arr[arr == float("-inf")] = 0
 
 fig3 = go.Figure(
@@ -134,7 +132,6 @@ neu_retweets = np.log10(neu_retweets_init)
 pos_retweets = np.log10(pos_retweets_init)
 
 for arr in [neg_retweets, neu_retweets, pos_retweets]:
-    arr[arr == -np.inf] = 0
     arr[arr == float("-inf")] = 0
 
 fig5 = go.Figure(
@@ -163,3 +160,35 @@ fig6 = ff.create_distplot(hist_data, group_labels, show_hist=False, colors=color
 
 fig6.update_layout(title_text='Curve/Rug Plot of Retweets by Sentiment (log scale)')
 fig6.show()
+
+# 7: Distribution of Retweets by Sentiment (log scale) (zeroes removed)
+neg_retweets_no_0 = neg_retweets[neg_retweets > 0]
+neu_retweets_no_0 = neu_retweets[neu_retweets > 0]
+pos_retweets_no_0 = pos_retweets[pos_retweets > 0]
+
+fig7 = go.Figure(
+    layout_title_text="Distribution of Retweets by Sentiment (log scale) (zeroes removed)"
+)
+
+fig7.add_trace(go.Box(x=neg_retweets_no_0,
+                      name='Negative',
+                      marker_color='#EF553B'))
+fig7.add_trace(go.Box(x=neu_retweets_no_0,
+                      name='Neutral',
+                      marker_color='#636EFA'))
+fig7.add_trace(go.Box(x=pos_retweets_no_0,
+                      name='Positive',
+                      marker_color='#00CC96'))
+
+fig7.update_layout()
+fig7.show()
+
+# 8: Histogram of Retweets by Sentiment (log scale) (zeroes removed)
+hist_data = [neg_retweets_no_0, neu_retweets_no_0, pos_retweets_no_0]
+group_labels = ['Negative', 'Neutral', 'Positive']
+colors = ['#EF553B', '#636EFA', '#00CC96']
+
+fig8 = ff.create_distplot(hist_data, group_labels, show_hist=False, colors=colors)
+
+fig8.update_layout(title_text='Curve/Rug Plot of Retweets by Sentiment (log scale) (zeroes removed)')
+fig8.show()
