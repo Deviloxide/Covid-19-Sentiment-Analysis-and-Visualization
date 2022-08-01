@@ -1,10 +1,11 @@
+import plotly.express as px
 import plotly.figure_factory as ff
 import plotly.graph_objects as go
 import numpy as np
 import pandas as pd
 
 # Read in dataset
-sentiment_results = pd.read_csv("D:/tweets_visual.csv")
+sentiment_results = pd.read_csv("D:/tweets_visual_larger.csv")
 
 # 1: Data Breakdown by Verification Status
 verification_status = sentiment_results["verified"].value_counts()
@@ -21,8 +22,6 @@ fig1 = go.Figure(
     data=data_ver,
     layout_title_text="Users by Verification Status"
 )
-
-fig1.show()
 
 # 2: Relative Percentage of Sentiment by Verification Status
 fig2 = go.Figure(
@@ -41,7 +40,7 @@ fig2.add_trace(go.Bar(
     orientation='h',
     marker=dict(
         color='#EF553B',
-        line=dict(color='black', width=2)
+        line=dict(color='black', width=1)
     )
 ))
 
@@ -57,7 +56,7 @@ fig2.add_trace(go.Bar(
     orientation='h',
     marker=dict(
         color='#636EFA',
-        line=dict(color='black', width=2)
+        line=dict(color='black', width=1)
     )
 ))
 
@@ -73,12 +72,11 @@ fig2.add_trace(go.Bar(
     orientation='h',
     marker=dict(
         color='#00CC96',
-        line=dict(color='black', width=2)
+        line=dict(color='black', width=1)
     )
 ))
 
 fig2.update_layout(barmode='stack')
-fig2.show()
 
 # 3: Distribution of Likes by Sentiment (log scale)
 # Get rid of "divide by zero encountered in log10" warning
@@ -110,7 +108,6 @@ fig3.add_trace(go.Box(x=pos_likes,
                       marker_color='#00CC96'))
 
 fig3.update_layout()
-fig3.show()
 
 # 4: Histogram of Likes by Sentiment (log scale)
 hist_data = [neg_likes, neu_likes, pos_likes]
@@ -120,7 +117,6 @@ colors = ['#EF553B', '#636EFA', '#00CC96']
 fig4 = ff.create_distplot(hist_data, group_labels, show_hist=False, colors=colors)
 
 fig4.update_layout(title_text='Curve/Rug Plot of Likes by Sentiment (log scale)')
-fig4.show()
 
 # 5: Distribution of Retweets by Sentiment (log scale)
 neg_retweets_init = sentiment_results[sentiment_results["sentiment"] == 0]["retweets"]
@@ -149,7 +145,6 @@ fig5.add_trace(go.Box(x=pos_retweets,
                       marker_color='#00CC96'))
 
 fig5.update_layout()
-fig5.show()
 
 # 6: Histogram of Retweets by Sentiment (log scale)
 hist_data = [neg_retweets, neu_retweets, pos_retweets]
@@ -159,7 +154,6 @@ colors = ['#EF553B', '#636EFA', '#00CC96']
 fig6 = ff.create_distplot(hist_data, group_labels, show_hist=False, colors=colors)
 
 fig6.update_layout(title_text='Curve/Rug Plot of Retweets by Sentiment (log scale)')
-fig6.show()
 
 # 7: Distribution of Retweets by Sentiment (log scale) (zeroes removed)
 neg_retweets_no_0 = neg_retweets[neg_retweets > 0]
@@ -181,7 +175,6 @@ fig7.add_trace(go.Box(x=pos_retweets_no_0,
                       marker_color='#00CC96'))
 
 fig7.update_layout()
-fig7.show()
 
 # 8: Histogram of Retweets by Sentiment (log scale) (zeroes removed)
 hist_data = [neg_retweets_no_0, neu_retweets_no_0, pos_retweets_no_0]
@@ -191,4 +184,43 @@ colors = ['#EF553B', '#636EFA', '#00CC96']
 fig8 = ff.create_distplot(hist_data, group_labels, show_hist=False, colors=colors)
 
 fig8.update_layout(title_text='Curve/Rug Plot of Retweets by Sentiment (log scale) (zeroes removed)')
+
+# 9: Histogram of Retweets by Sentiment (log scale) (zeroes removed)
+fig9 = go.Figure(data=go.Scatter(
+    x=sentiment_results["polarity"],
+    y=sentiment_results["subjectivity"],
+    mode='markers',
+    marker=dict(
+        size=5,
+        color=sentiment_results["sentiment"],  # set color equal to a variable
+        colorscale=['#EF553B', '#636EFA', '#00CC96'],  # one of plotly colorscales
+        showscale=True
+    )
+))
+
+# 10: Histogram of Retweets by Sentiment (log scale) (zeroes removed)
+mask_web = (sentiment_results['source'] == "Twitter Web App")
+mask_and = (sentiment_results['source'] == "Twitter for Android")
+mask_ios = ((sentiment_results['source'] == "Twitter for iPhone") | (sentiment_results['source'] == "Twitter for iPad"))
+
+sentiment_results.loc[mask_web, 'source category'] = "Web App"
+sentiment_results.loc[mask_and, 'source category'] = "Android"
+sentiment_results.loc[mask_ios, 'source category'] = "IOS"
+sentiment_results.loc[sentiment_results['source category'].isnull(), 'source category'] = "Other"
+
+fig10 = px.scatter(sentiment_results, x = "polarity", y = "subjectivity", color="source category",
+                 title = "Scatterplot of polarity, subjectivity, and source category")
+
+fig10.update_traces(marker=dict(size = 5))
+
+fig1.show()
+fig2.show()
+fig3.show()
+fig4.show()
+fig5.show()
+fig6.show()
+fig7.show()
 fig8.show()
+fig9.show()
+fig10.show()
+
