@@ -16,8 +16,8 @@ unverified_num = verification_status[0]
 verified_num = verification_status[1]
 
 data_ver = [go.Bar(
-    x=verification_status.index,  # index = category name
-    y=verification_status.values,  # value = count
+    x=verification_status.index,
+    y=verification_status.values,
 )]
 
 fig1 = go.Figure(
@@ -215,8 +215,8 @@ fig9 = go.Figure(data=go.Scatter(
     mode='markers',
     marker=dict(
         size=5,
-        color=sentiment_results["sentiment"],  # set color equal to a variable
-        colorscale=['#EF553B', '#636EFA', '#00CC96'],  # one of plotly colorscales
+        color=sentiment_results["sentiment"],
+        colorscale=['#EF553B', '#636EFA', '#00CC96'],
         showscale=True
     )
 ))
